@@ -19,6 +19,13 @@ from django.urls import include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('veterinary.urls')),
     path('accounts/', include('accounts.urls')),
+    path('', include('veterinary.urls')),
+    path('', include('personal.urls'))
 ]
+
+
+from django.conf.urls.static import static
+from django.conf import settings
+if  settings.DEBUG:
+    urlpatterns +=static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

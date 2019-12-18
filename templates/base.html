@@ -50,17 +50,16 @@
             <li class="box-item"><a href="">Персонал</a></li>
             <li class="box-item"><a href="">Отзывы</a></li>
             <li class="box-item"><a href="">Записаться на прием</a></li>
-           <!--
+
             {% if user.is_authenticated %}
              <li class="line"></li>
              
             <li class="box-item login">
-              <a href=""><i class="fa fa-user fa-lg" aria-hidden="true"></i></a>
+              <a href="{% url 'personal' %}"><i class="fa fa-user fa-lg" aria-hidden="true"></i></a>
             </li> 
             {% else %}
-              <li class="box-item"><a href="">Войти</a></li>
+              <li class="box-item"><a href="{% url 'login' %}">Войти</a></li>
              {% endif %}
-            -->
           </ul>
         </div>
       </div>

@@ -8,7 +8,7 @@
 
 {% block content_title %}
 	<p class="m">Личный кабинет</p>
-	<p class="s"><a href="{% url 'main_page' %}">Главная</a> / <span>Личный кабинет</span></p>
+	<p class="s"><a href="{% url 'index' %}">Главная</a> / <span>Личный кабинет</span></p>
 {% endblock %}
 
 {% block content %}
@@ -22,12 +22,12 @@
 		</div>
 		<div class="col-md-9">
 			<div class="row">
-			{% if doctor %}
-			<button onclick="location.href='{% url 'clients' %}'" class='m-3 forms-btn btn btn-secondary' type='submit'>Мои клиенты</button>
+			{% if user.is_staff %}
+			<button onclick="location.href=''" class='m-3 forms-btn btn btn-secondary' type='submit'>Мои клиенты</button>
 			{% else %}
-			<button onclick="location.href='{% url 'process' %}'" class='m-3 forms-btn btn btn-secondary' type='submit'>Процесс лечения</button>
+			<button onclick="location.href=''" class='m-3 forms-btn btn btn-secondary' type='submit'>Процесс лечения</button>
 			{% endif %}
-			<button onclick="location.href='{% url 'change' %}'" class='m-3 forms-btn btn btn-warning' type='submit'>Редактировать профиль</button>
+			<button onclick="location.href=''" class='m-3 forms-btn btn btn-warning' type='submit'>Редактировать профиль</button>
 			<button onclick="location.href='{% url 'logout' %}'" class='m-3 forms-btn btn btn-danger' type='submit'>Выйти</button>	
 		</div>
 			<table class="table table-hover">
@@ -50,21 +50,24 @@
 			      <td>{{ user.email }}</td>
 			    </tr>
 			    <tr>
-			      <td>С нами с {{ user.date_joined }}s</td>
+			      <td>С нами с {{ user.date_joined }}</td>
 			    </tr>
 			  </tbody>
 			</table>
 		</div>
 	</div>
-		<div class="row docdetail m-1">
+		<div class="docdetail m-1">
 			
-			{% if doctor %}	
+			{% if user.is_staff %}
 				<p><b>Специализация:</b> {{ doctor.position }}</p>
 				<p><b>Образование:</b> {{ doctor.education }}</p>
 				<p><b>Квалификация:</b> {{ doctor.qualification }}</p>
 				<p><b>Общая информация:</b> {{ doctor.description }}</p>
+			{% else %}
+				<p><b>Район:</b>{% if pers.district %} {{ pers.district }} {% else %} Не выбран {% endif%}</p>
+				<p><b>Скидочные очки:</b> {% if pers.points %} {{ pers.points }} {% else %} 0 {% endif%} </p>
 			{% endif %}
 		</div>
-	</div>
+	
 
 {% endblock %}
