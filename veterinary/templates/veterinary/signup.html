@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+
+{% block title %}
+	Регистрация
+{% endblock %}
+
+{% block content_title %}
+	<p class="m">Регистрация</p>
+	<p class="s"><a href="">Главная</a> / <a href="{% url 'login' %}">Войти</a> / <span>Регистрация</span></p>
+{% endblock %}
+
+{% block content %}
+	<div class="col-md-8 offset-md-2">
+		<form method="post" action="{% url 'signup' %}">
+			{% csrf_token %}
+
+			<div class="forms">
+				<p class="forms-name">{{ form.username.label }}</p>
+				{% bootstrap_field form.username show_label=False %}
+			</div>
+
+			<div class="forms">
+				<p class="forms-name">{{ form.password1.label }}</p>
+				{% bootstrap_field form.password1 show_label=False %}
+			</div>
+
+			<div class="forms">
+				<p class="forms-name">{{ form.password2.label }}</p>
+				{% bootstrap_field form.password2 show_label=False %}
+			</div>
+
+			<button class='forms-btn btn btn-secondary' type='submit'>Зарегистрироваться</button>
+		</form>
+
+		{# Assumes you setup the password_reset view in your URLconf #}
+		<!-- <p><a href="{% url 'password_reset' %}">Забыли пароль?</a></p> -->
+	</div>
+
+{% endblock %}

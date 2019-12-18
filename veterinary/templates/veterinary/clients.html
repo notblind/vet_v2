@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+	Мои клиенты
+{% endblock %}
+
+{% block content_title %}
+	<p class="m">Мои клиенты</p>
+	<p class="s"><a href="{% url 'main_page' %}">Главная</a> / <a href="{% url 'personal' %}">Личный кабинет</a> / <span>Мои клиенты</span></p>
+{% endblock %}
+
+{% block content %} 
+	<div class = "offset-md-2 col-md-8 comments">
+		<!--
+		<div class="row justify-content-md-center">
+			<form class="col-md-6 row justify-content-md-center" action="{% url 'clients' %}">
+				<input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="search">
+				<button class="btn btn-secondary m-3" type="submit">Search</button>
+			</form>
+		</div>
+		-->
+		{% for card in cards %}
+			<div class="comments-item">
+				<p class="logo">Карточка клиента</p>
+				<p>Клиент: {{ card.client.first_name }} {{ card.client.last_name }} {{ card.client.middle_name }}</p>
+				<p>Почта клиента: {{ card.client.email }}</p>
+				<p>Услуги: 
+				{% for obj in card.services.all %}
+					<br><i class="fa fa-heartbeat" aria-hidden="true"></i> {{ obj }}
+				{% endfor %} </p>
+				<p>Дата первого посещения: {{ card.datetime }}</p>
+					<form method="post" action='{% url 'clients' %}?id={{ card.id }}'> 
+						{% csrf_token %}
+						{% for key, item in form.items %}
+							{% if key == card.id %}
+								<p class="tutsy">Статус:</p>
+								{{ item.status }}
+							{% endif %}
+						{% endfor %}
+						<div class="row justify-content-md-center">	
+							<button class='m-3 forms-btn btn btn-warning' type='submit'><i class="fa fa-pencil" aria-hidden="true"></i></button>
+						
+						</div>
+					</form>
+					<div class="row justify-content-md-center">	
+					<button onclick="location.href='{% url 'delete_card' card.id %}'" class='m-3 forms-btn btn btn-danger'><i class="fa fa-times" aria-hidden="true"></i></button>
+					</div>
+			</div>
+		{% endfor %}
+	</div>
+{% endblock %}

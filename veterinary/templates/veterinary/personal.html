@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+{% load static %}
+
+{% block title %}
+	Личный кабинет
+{% endblock %}
+
+{% block content_title %}
+	<p class="m">Личный кабинет</p>
+	<p class="s"><a href="{% url 'main_page' %}">Главная</a> / <span>Личный кабинет</span></p>
+{% endblock %}
+
+{% block content %}
+	<div class="row docdetail">
+		<div class="col-md-3 d-flex justify-content-center align-items-center">
+			{% if user.foto %}
+				<img class="img-fluid  rounded img-detail" src="{{ user.foto.url }}">
+			{% else %}
+				<img class="img-fluid  rounded img-detail" src="/media/user.jpg">
+			{% endif %}
+		</div>
+		<div class="col-md-9">
+			<div class="row">
+			{% if doctor %}
+			<button onclick="location.href='{% url 'clients' %}'" class='m-3 forms-btn btn btn-secondary' type='submit'>Мои клиенты</button>
+			{% else %}
+			<button onclick="location.href='{% url 'process' %}'" class='m-3 forms-btn btn btn-secondary' type='submit'>Процесс лечения</button>
+			{% endif %}
+			<button onclick="location.href='{% url 'change' %}'" class='m-3 forms-btn btn btn-warning' type='submit'>Редактировать профиль</button>
+			<button onclick="location.href='{% url 'logout' %}'" class='m-3 forms-btn btn btn-danger' type='submit'>Выйти</button>	
+		</div>
+			<table class="table table-hover">
+			  <thead>
+			  </thead>
+			  <tbody>
+			    <tr>
+			      <td>{% if user.username %} {{ user.username }} {% else %} Логин {% endif%}</td>
+			    </tr>
+			    <tr>
+			      <td>{% if user.first_name %} {{ user.first_name }} {% else %} Имя {% endif%}</td>
+			    </tr>
+			    <tr>
+			    	<td>{% if user.last_name %} {{ user.last_name }} {% else %} Фамилия {% endif%}</td>
+			    </tr>
+			    <tr>
+			    	<td>{% if user.middle_name %} {{ user.middle_name }} {% else %} Отчество {% endif%}</td>
+			    </tr>
+			    <tr>
+			      <td>{{ user.email }}</td>
+			    </tr>
+			    <tr>
+			      <td>С нами с {{ user.date_joined }}s</td>
+			    </tr>
+			  </tbody>
+			</table>
+		</div>
+	</div>
+		<div class="row docdetail m-1">
+			
+			{% if doctor %}	
+				<p><b>Специализация:</b> {{ doctor.position }}</p>
+				<p><b>Образование:</b> {{ doctor.education }}</p>
+				<p><b>Квалификация:</b> {{ doctor.qualification }}</p>
+				<p><b>Общая информация:</b> {{ doctor.description }}</p>
+			{% endif %}
+		</div>
+	</div>
+
+{% endblock %}

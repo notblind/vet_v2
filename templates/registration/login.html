@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+
+{% block title %}
+	Войти
+{% endblock %}
+
+{% block content_title %}
+	<p class="m">Войти</p>
+	<p class="s"><a href="">Главная</a> / <span>Войти</span></p>
+{% endblock %}
+
+{% block content %}
+	<div class="col-md-8 offset-md-2">
+		{% if form.errors %}
+		<div class="alert alert-danger" role="alert">
+			Неверный логин или пароль
+		</div>
+		{% endif %}
+		<form method="post" action="{% url 'login' %}">
+			{% csrf_token %}
+			
+			<div class="forms">
+				<p class="forms-name">{{ form.username.label }}</p>
+				{% bootstrap_field form.username show_label=False %}
+			</div>
+
+			<div class="forms">
+				<p class="forms-name">{{ form.password.label }}</p>
+				{% bootstrap_field form.password show_label=False %}
+			</div>
+
+			<button class='forms-btn btn btn-secondary' type='submit'>Войти</button>
+		</form>
+
+		<a href="{% url 'signup' %}">Зарегистрируйтесь, если нет аккаунта</a>
+		{# Assumes you setup the password_reset view in your URLconf #}
+		<!-- <p><a href="{% url 'password_reset' %}">Забыли пароль?</a></p> -->
+	</div>
+
+{% endblock %}

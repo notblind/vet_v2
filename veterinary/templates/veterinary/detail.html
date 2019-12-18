@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+	{{ doc.user.last_name }} {{ doc.user.first_name }}
+{% endblock %}
+
+{% block content_title %}
+	<p class="m">{{ doc.user.last_name }} {{ doc.user.first_name }} {{ doc.user.middle_name }}</p>
+	<p class="s"><a href="{% url 'main_page' %}">Главная</a> / <a href="{% url 'staff' slug='all' %}">Персонал</a> / <span>{{ doc.user.last_name }} {{ doc.user.first_name }} {{ doc.user.middle_name }}</span></p>
+{% endblock %}
+
+{% block content %}
+	<div class="row docdetail">
+		<div class="col-md-4">
+			<img class="img-fluid  rounded" src="{{ doc.user.foto.url }}">
+		</div>
+		<div class="col-md-8">
+			<h3>{{ doc.user.last_name }} {{ doc.user.first_name }} {{ doc.user.middle_name }}</h3>
+			<p><b>Специализация:</b> {{ doc.position }}</p>
+			<p><b>Образование:</b> {{ doc.education }}</p>
+			<p><b>Квалификация:</b> {{ doc.qualification }}</p>
+			<p>{{ doc.description }}</p>
+		</div>
+	</div>
+{% endblock %}

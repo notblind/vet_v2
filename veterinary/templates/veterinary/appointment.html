@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+
+{% block title %}
+	Запись на прием
+{% endblock %}
+
+{% block link %} 
+
+{% endblock %}
+
+{% block content_title %}
+	<p class="m">Запись на прием</p>
+	<p class="s"><a href="{% url 'main_page' %}">Главная</a> / <span>Запись на прием</span></p>
+{% endblock %}
+
+{% block content %}
+	<div class="col-md-8 offset-md-2">
+		<form method="POST" action="{% url 'appointment' %}" enctype="multipart/form-data">
+			{% csrf_token %}
+
+			{% for item in form %}
+			<div class="forms">
+				<p class="forms-name">{{ item.label }}</p>
+				{{ item }}
+			</div>
+			{% endfor %}
+
+
+
+
+			<button class='forms-btn btn btn-secondary' type='submit'>Записаться</button>
+		</form>
+	</div>
+	<script>
+      $(function () {
+        $("#datetimepicker1").datetimepicker();
+      });
+    </script>
+{% endblock %}
