@@ -2,6 +2,8 @@
 {% load bootstrap4 %}
 {% load static %}
 
+
+
 {% block title %}
 	Личный кабинет
 {% endblock %}
@@ -23,9 +25,10 @@
 		<div class="col-md-9">
 			<div class="row">
 			{% if user.is_staff %}
-			<button onclick="location.href=''" class='m-3 forms-btn btn btn-secondary' type='submit'>Мои клиенты</button>
+			<button onclick="location.href=''" class='m-3 forms-btn btn btn-success' type='submit'>Мои клиенты</button>
 			{% else %}
-			<button onclick="location.href=''" class='m-3 forms-btn btn btn-secondary' type='submit'>Процесс лечения</button>
+			<button onclick="location.href=''" class='m-3 forms-btn btn btn-success' type='submit'>Процесс лечения</button>
+			<button onclick="location.href='{% url 'add_animal' %}'" class='m-3 forms-btn btn btn-primary' type='submit'>Добавить питомца</button>
 			{% endif %}
 			<button onclick="location.href=''" class='m-3 forms-btn btn btn-warning' type='submit'>Редактировать профиль</button>
 			<button onclick="location.href='{% url 'logout' %}'" class='m-3 forms-btn btn btn-danger' type='submit'>Выйти</button>	
@@ -47,7 +50,7 @@
 			    	<td>{% if user.middle_name %} {{ user.middle_name }} {% else %} Отчество {% endif%}</td>
 			    </tr>
 			    <tr>
-			      <td>{{ user.email }}</td>
+			      <td>{% if user.email %} {{ user.emaile }} {% else %} Email {% endif%}</td>
 			    </tr>
 			    <tr>
 			      <td>С нами с {{ user.date_joined }}</td>
@@ -68,6 +71,4 @@
 				<p><b>Скидочные очки:</b> {% if pers.points %} {{ pers.points }} {% else %} 0 {% endif%} </p>
 			{% endif %}
 		</div>
-	
-
 {% endblock %}
