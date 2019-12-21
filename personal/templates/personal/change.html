@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+
+{% block title %}
+	Редактироать профиль
+{% endblock %}
+
+{% block content_title %}
+	Редактироать профиль
+{% endblock %}
+
+{% block content %}
+	<div class="col-md-8 offset-md-2">
+		<form method="POST" action="{% url 'change' %}" enctype="multipart/form-data">
+			{% csrf_token %}
+
+			{% for item in form %}
+			<div class="forms">
+				<p class="forms-name">{{ item.label }}</p>
+				{{ item }}
+			</div>
+			{% endfor %}
+
+
+
+
+			<button class='forms-btn btn btn-secondary' type='submit'>Изменить</button>
+		</form>
+
+		{# Assumes you setup the password_reset view in your URLconf #}
+		<!-- <p><a href="{% url 'password_reset' %}">Забыли пароль?</a></p> -->
+	</div>
+
+{% endblock %}

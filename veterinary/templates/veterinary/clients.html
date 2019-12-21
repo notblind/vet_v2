@@ -7,7 +7,7 @@
 
 {% block content_title %}
 	<p class="m">Мои клиенты</p>
-	<p class="s"><a href="{% url 'main_page' %}">Главная</a> / <a href="{% url 'personal' %}">Личный кабинет</a> / <span>Мои клиенты</span></p>
+	<p class="s"><a href="{% url 'index' %}">Главная</a> / <a href="{% url 'personal' %}">Личный кабинет</a> / <span>Мои клиенты</span></p>
 {% endblock %}
 
 {% block content %} 
@@ -20,17 +20,19 @@
 			</form>
 		</div>
 		-->
-		{% for card in cards %}
+		{% for appointment in appointments %}
 			<div class="comments-item">
-				<p class="logo">Карточка клиента</p>
-				<p>Клиент: {{ card.client.first_name }} {{ card.client.last_name }} {{ card.client.middle_name }}</p>
-				<p>Почта клиента: {{ card.client.email }}</p>
-				<p>Услуги: 
-				{% for obj in card.services.all %}
-					<br><i class="fa fa-heartbeat" aria-hidden="true"></i> {{ obj }}
-				{% endfor %} </p>
-				<p>Дата первого посещения: {{ card.datetime }}</p>
-					<form method="post" action='{% url 'clients' %}?id={{ card.id }}'> 
+				<p class="logo">Запись клиента</p>
+				{% if appointment.animal %}
+					<p>Клиент: {{ appointment.animal.client.user.first_name }} {{ appointment.animal.client.user.last_name }} {{ appointment.animal.client.user.middle_name }}</p>
+					<p>Питомец: {{ appointment.animal }} </p>
+				{% else %}
+					<p>Незарегистрированный клиент</p>
+				{% endif %}
+				<p>Почта клиента: {% if appointment.email %} {{ appointment.email }} {% else %} {{ appointment.animal.client.user.email }} {% endif %} </p>
+				<p>Дата первого посещения: {{ appointment.date }}</p>
+				<p>Диагноз:</p>
+		'''	<!--		<form method="post" action='{% url 'clients' %}?id={{ card.id }}'> 
 						{% csrf_token %}
 						{% for key, item in form.items %}
 							{% if key == card.id %}
@@ -42,9 +44,12 @@
 							<button class='m-3 forms-btn btn btn-warning' type='submit'><i class="fa fa-pencil" aria-hidden="true"></i></button>
 						
 						</div>
-					</form>
+					</form>  --> '''
+
 					<div class="row justify-content-md-center">	
-					<button onclick="location.href='{% url 'delete_card' card.id %}'" class='m-3 forms-btn btn btn-danger'><i class="fa fa-times" aria-hidden="true"></i></button>
+					<button onclick="location.href=''" class='m-3 forms-btn btn btn-warning' type='submit'>Поставить диагноз</button>
+					<button onclick="location.href='{% url 'visits' id=appointment.id %}'" class='m-3 forms-btn btn btn-warning' type='submit'>Посещения клиента</button>
+					<button onclick="location.href=''" class='m-3 forms-btn btn btn-danger'><i class="fa fa-times" aria-hidden="true"></i></button>
 					</div>
 			</div>
 		{% endfor %}

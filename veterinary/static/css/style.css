@@ -622,6 +622,12 @@ a:active {
   text-decoration: none;
   overflow: hidden;
 }
+.red {
+  color: #3d94d5;
+}
+.appoint a {
+  text-decoration: underline;
+}
 @font-face {
   font-family: "Lobster";
   src: url(../fonts/Lobster.woff2) format("truetype");

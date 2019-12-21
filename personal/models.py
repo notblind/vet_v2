@@ -21,7 +21,6 @@ class DistrictModel(models.Model):
 
 class ClientModel(models.Model):
 	district = models.ForeignKey(DistrictModel, on_delete=models.CASCADE)
-	points = models.PositiveSmallIntegerField(default=0)
 	user = models.OneToOneField(User, on_delete = models.CASCADE)
 
 
@@ -40,8 +39,11 @@ class BreedModel(models.Model):
 
 class AnimaClientModel(models.Model):
 	nickname = models.CharField(max_length=256, blank=True)
-	age = models.PositiveSmallIntegerField(default=0)
+	age = models.PositiveSmallIntegerField(default=0, blank=True)
 	foto = models.ImageField(null=True, blank=True)
 	animal = models.ForeignKey(AnimalModel, on_delete=models.CASCADE)
 	client = models.ForeignKey(ClientModel, on_delete=models.CASCADE)
 	breed = models.ForeignKey(BreedModel, on_delete=models.CASCADE)
+
+	def __str__(self):
+		return self.nickname

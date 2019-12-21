@@ -24,15 +24,15 @@
 		</div>
 		<div class="col-md-9">
 			<div class="row">
-			{% if user.is_staff %}
-			<button onclick="location.href=''" class='m-3 forms-btn btn btn-success' type='submit'>Мои клиенты</button>
-			{% else %}
-			<button onclick="location.href=''" class='m-3 forms-btn btn btn-success' type='submit'>Процесс лечения</button>
-			<button onclick="location.href='{% url 'add_animal' %}'" class='m-3 forms-btn btn btn-primary' type='submit'>Добавить питомца</button>
-			{% endif %}
-			<button onclick="location.href=''" class='m-3 forms-btn btn btn-warning' type='submit'>Редактировать профиль</button>
-			<button onclick="location.href='{% url 'logout' %}'" class='m-3 forms-btn btn btn-danger' type='submit'>Выйти</button>	
-		</div>
+				{% if user.is_staff %}
+				<button onclick="location.href='{% url 'clients' %}'" class='m-3 forms-btn btn btn-success' type='submit'>Мои клиенты</button>
+				<button onclick="location.href='{% url 'change_staff' %}'" class='m-3 forms-btn btn btn-warning' type='submit'>Редактировать профиль</button>
+				{% else %}
+				<button onclick="location.href='{% url 'add_animal' %}'" class='m-3 forms-btn btn btn-primary' type='submit'>Добавить питомца</button>
+				<button onclick="location.href='{% url 'change' %}'" class='m-3 forms-btn btn btn-warning' type='submit'>Редактировать профиль</button>
+				{% endif %}
+				<button type="button" class="m-3 forms-btn btn btn-danger" data-toggle="modal" data-target="#exampleModal">Выйти</button>
+			</div>
 			<table class="table table-hover">
 			  <thead>
 			  </thead>
@@ -50,7 +50,7 @@
 			    	<td>{% if user.middle_name %} {{ user.middle_name }} {% else %} Отчество {% endif%}</td>
 			    </tr>
 			    <tr>
-			      <td>{% if user.email %} {{ user.emaile }} {% else %} Email {% endif%}</td>
+			      <td>{% if user.email %} {{ user.email }} {% else %} Email {% endif%}</td>
 			    </tr>
 			    <tr>
 			      <td>С нами с {{ user.date_joined }}</td>
@@ -59,16 +59,59 @@
 			</table>
 		</div>
 	</div>
-		<div class="docdetail m-1">
+		<div class="docdetail">
 			
-			{% if user.is_staff %}
-				<p><b>Специализация:</b> {{ doctor.position }}</p>
-				<p><b>Образование:</b> {{ doctor.education }}</p>
-				<p><b>Квалификация:</b> {{ doctor.qualification }}</p>
-				<p><b>Общая информация:</b> {{ doctor.description }}</p>
+			{% if user.is_staff %} 
+				<p><b>Образование:</b> {{ pers.education }}</p>
+				<p><b>Квалификация:</b> {{ pers.qualification }}</p>
+				<p><b>Оценка:</b> {{ pers.points }}</p>
+				<p><b>Общая информация:</b> {{ pers.description }}</p>
 			{% else %}
-				<p><b>Район:</b>{% if pers.district %} {{ pers.district }} {% else %} Не выбран {% endif%}</p>
-				<p><b>Скидочные очки:</b> {% if pers.points %} {{ pers.points }} {% else %} 0 {% endif%} </p>
+			<table class="table table-hover">
+			  <thead>
+			  </thead>
+			  <tbody>
+			    <tr>
+			    	<td><b>Район</b></td>
+			      <td>{% if pers.district %} {{ pers.district }} {% else %} Не выбран {% endif%}</td>
+			    </tr>
+			    </tbody>
+			</table>
 			{% endif %}
 		</div>
+		{% if animals %}
+		<div class="docdetail m-2">
+			<p><b>Мои питомцы</b></p>
+		</div>
+		<div class="row">
+			{% for animal in animals %}
+				<div class="col-md-4 col-6 doc-box" onclick="location.href='{% url 'get_animal' id=animal.id  %}';">
+					<div class="doc-img">
+						<img class="img-fluid" src="{% if animal.foto %} {{ animal.foto.url }} {% else %} /media/m1000x1000.jpeg {%endif%}">
+					</div>
+					<p class="f">{{ animal.nickname }}</p> 
+					<p class="s">{{ item.position }}</p>
+				</div>
+			{% endfor %}
+		</div>
+		{% endif %}
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Вы точно хотите выйти?</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+      	<button onclick="location.href='{% url 'logout' %}'" class='m-3 forms-btn btn btn-danger' type='submit'>Да</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Нет</button>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}

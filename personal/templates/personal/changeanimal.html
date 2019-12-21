@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+{% load static %}
+
+
+{% block title %}
+	Редактировать
+{% endblock %}
+
+{% block link %}
+
+
+{% endblock %}
+
+{% block content_title %}
+	<p class="m">Редактировать</p>
+	<p class="s"><a href="{% url 'index' %}">Главная</a> / <a href="{% url 'personal' %}">Личный кабинет</a> / <span>Добавить питомца</span></p>
+{% endblock %}
+
+{% block content %}
+	<div class="col-md-8 offset-md-2">
+		<form method="POST" id="personForm" action="{% url 'change_animal' id=idan %}" enctype="multipart/form-data" data-breeds-url="{% url 'ajax_load_breeds' %}">
+			{% csrf_token %}
+
+			{% for item in form %}
+			<div class="forms">
+				<p class="forms-name">{{ item.label }}</p>
+				{{ item }}
+			</div>
+			{% endfor %}
+
+			<button class='forms-btn btn btn-secondary' type='submit'>Изменить</button>
+		</form>
+
+		{# Assumes you setup the password_reset view in your URLconf #}
+		<!-- <p><a href="{% url 'password_reset' %}">Забыли пароль?</a></p> -->
+	</div>
+	
+  <script>
+
+	$("#id_animal").change(function () {
+	  var url = $("#personForm").attr("data-breeds-url");  // get the url of the `load_cities` view
+	  var animalId = $(this).val();  // get the selected country ID from the HTML input
+
+	  $.ajax({                       // initialize an AJAX request
+	    url: '{% url 'ajax_load_breeds' %}',                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+	    data: {
+	      'animal': animalId      // add the country id to the GET parameters
+	    },
+	    success: function (data) {   // `data` is the return of the `load_cities` view function
+	      $("#id_breed").html(data);  // replace the contents of the city input with the data that came from the server
+	    }
+	  });
+
+	});
+  </script>
+{% endblock %}

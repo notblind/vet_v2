@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+{% load static %}
+
+
+
+{% block title %}
+	Страничка питомца
+{% endblock %}
+
+{% block content_title %}
+	<p class="m">Страничка питомца</p>
+	<p class="s"><a href="{% url 'index' %}">Главная</a> / <span>Личный кабинет</span></p>
+{% endblock %}
+
+{% block content %}
+	<div class="row docdetail">
+		<div class="col-md-3 d-flex justify-content-center align-items-center">
+			{% if animal.foto %}
+				<img class="img-fluid  rounded img-detail" src="{{ animal.foto.url }}">
+			{% else %}
+				<img class="img-fluid  rounded img-detail" src="/media/m1000x1000.jpeg">
+			{% endif %}
+		</div>
+		<div class="col-md-9">
+			<div class="row">
+				<button onclick="location.href=''" class='m-3 forms-btn btn btn-primary' type='submit'>Карточка питомца</button>
+				<button onclick="location.href='{% url 'change_animal' id=animal.id %}'" class='m-3 forms-btn btn btn-warning' type='submit'>Редактировать</button>
+				<button type="button" class="m-3 forms-btn btn btn-danger" data-toggle="modal" data-target="#exampleModal">Удалить</button>
+			</div>
+			<table class="table table-hover">
+			  <thead>
+			  </thead>
+			  <tbody>
+			    <tr>
+			      <td>{% if animal.nickname %} {{ animal.nickname }} {% else %} Кличка питомца {% endif%}</td>
+			    </tr>
+	
+			    <tr>
+			    	<td>{% if animal.animal %} {{ animal.animal }} {% else %} Питомец {% endif%}</td>
+			    </tr>
+			    <tr>
+			    	<td>{% if animal.breed %} {{ animal.breed }} {% else %} Порода {% endif%}</td>
+			    </tr>
+			    <tr>
+			      <td>{% if animal.age %} {{ animal.age }} полных лет {% else %} Кол-во полных лет {% endif%}</td>
+			    </tr>
+
+			  </tbody>
+			</table>
+		</div>
+	</div>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Вы точно хотите удалить питомца?</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+      	<button onclick="location.href='{% url 'delete_animal' id=animal.id %}'" class='m-3 forms-btn btn btn-danger' type='submit'>Да</button>	
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Нет</button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

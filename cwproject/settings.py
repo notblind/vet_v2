@@ -8,6 +8,31 @@ https://docs.djangoproject.com/en/2.2/topics/settings/
 
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.2/ref/settings/
+
+1 - erd
+
+2 - кабинет user: done
+
+3 - кабинет animal: done
+
+4 - кабинет staff: done
+
+5 - запись без регистрации: done
+
+6 - запись с регистрацией: done
+
+7 - клиенты стафа
+
+8 - карточка питомца
+
+9 - статистика
+
+10 - заполнить бд
+
+11 - врачи
+
+12 -отзывы
+
 """
 
 import os
@@ -40,7 +65,8 @@ INSTALLED_APPS = [
     'bootstrap4',
     'veterinary',
     'accounts',
-    'personal'
+    'personal',
+    'comments_app',
 ]
 
 MIDDLEWARE = [

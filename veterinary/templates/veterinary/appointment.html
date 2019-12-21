@@ -11,12 +11,26 @@
 
 {% block content_title %}
 	<p class="m">Запись на прием</p>
-	<p class="s"><a href="{% url 'main_page' %}">Главная</a> / <span>Запись на прием</span></p>
+	<p class="s"><a href="{% url 'index' %}">Главная</a> / <span>Запись на прием</span></p>
 {% endblock %}
 
 {% block content %}
 	<div class="col-md-8 offset-md-2">
-		<form method="POST" action="{% url 'appointment' %}" enctype="multipart/form-data">
+		{% if user.is_authenticated %}
+
+		{% else %}
+		<div class="docdetail text-center appoint">
+			<p class="red m-0" >Информация для посетителей</p>
+			<p>Чтобы отслеживать процесс лечения и иметь электонную карту болезней ваших любимых питомцев, рекомендуем <a href="{% url 'signup' %}">зарегистрироваться</a> на сайте и заполнить необходимые данные.</p>
+		</div>
+		{% endif %}
+		{% if check %}
+			<div class="docdetail text-center appoint">
+				<p class="red m-0" >Информация для посетителей</p>
+				<p>Чтобы записаться на прием <a href="{% url 'add_animal' %}">добавьте питомца</a>.<br><br><br><br></p>
+			</div>
+		{% else %}
+		<form method="POST" action="{% url 'appointment' %}">
 			{% csrf_token %}
 
 			{% for item in form %}
@@ -25,12 +39,9 @@
 				{{ item }}
 			</div>
 			{% endfor %}
-
-
-
-
 			<button class='forms-btn btn btn-secondary' type='submit'>Записаться</button>
 		</form>
+		{% endif %}
 	</div>
 	<script>
       $(function () {
