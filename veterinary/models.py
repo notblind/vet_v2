@@ -4,13 +4,14 @@ from accounts.models import *
 from personal.models import *
 # Create your models here.
 
-class IllnessClass(models.Model):
-	name = models.CharField(max_length=512)
 
 class IllnessModel(models.Model):
 	name = models.CharField(max_length=256)
 	description = models.CharField(max_length=1024)
-	illness = models.ForeignKey(IllnessClass, on_delete=models.CASCADE)
+	animal = models.ForeignKey(AnimalModel, on_delete=models.CASCADE)
+
+	def __str__(self):
+		return self.name
 
 class AppointmentModel(models.Model):
 	date = models.DateField()
@@ -26,14 +27,14 @@ class StatusModel(models.Model):
 		return self.name
 
 class IllnessAppointment(models.Model):
-	date_start = models.DateField(auto_now_add=True, null=True)
-	date_end = models.DateField(blank=True)
+	date_start = models.DateField(auto_now_add=True)
+	date_end = models.DateField(blank=True, null=True)
 	illness = models.ForeignKey(IllnessModel, on_delete=models.CASCADE)
 	appointment = models.ForeignKey(AppointmentModel, on_delete=models.CASCADE)
 	status = models.ForeignKey(StatusModel, on_delete=models.CASCADE)
 
 class VisitModel(models.Model):
 	appointment = models.ForeignKey(AppointmentModel, on_delete=models.CASCADE)
-	date = models.DateField()
+	date = models.DateField(auto_now_add=True)
 	note = models.CharField(max_length=2056, blank=True)
 

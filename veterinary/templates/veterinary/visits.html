@@ -2,16 +2,28 @@
 {% load static %}
 
 {% block title %}
-	Мои клиенты
+	Посещения
 {% endblock %}
 
 {% block content_title %}
-	<p class="m">Мои клиенты</p>
+	<p class="m">Посещения</p>
 	<p class="s"><a href="{% url 'index' %}">Главная</a> / <a href="{% url 'personal' %}">Личный кабинет</a> / <span>Мои клиенты</span></p>
 {% endblock %}
 
 {% block content %} 
 	<div class = "offset-md-2 col-md-8 comments">
+		<form method="POST" action="{% url 'visits' id=appointment.id %}" enctype="multipart/form-data">
+			{% csrf_token %}
+
+			{% for item in form %}
+			<div class="forms">
+				<p class="forms-name">{{ item.label }}</p>
+				{{ item }}
+			</div>
+			{% endfor %}
+
+			<button class='forms-btn btn btn-secondary' type='submit'>Добавить</button>
+		</form>
 		<!--
 		<div class="row justify-content-md-center">
 			<form class="col-md-6 row justify-content-md-center" action="{% url 'clients' %}">
@@ -23,20 +35,7 @@
 		{% for visit in visits %}
 			<div class="comments-item">
 				<p>Дата посещения: {{ visit.date }}</p>
-				<p>Диагноз:</p>
-		'''	<!--		<form method="post" action='{% url 'clients' %}?id={{ card.id }}'> 
-						{% csrf_token %}
-						{% for key, item in form.items %}
-							{% if key == card.id %}
-								<p class="tutsy">Статус:</p>
-								{{ item.status }}
-							{% endif %}
-						{% endfor %}
-						<div class="row justify-content-md-center">	
-							<button class='m-3 forms-btn btn btn-warning' type='submit'><i class="fa fa-pencil" aria-hidden="true"></i></button>
-						
-						</div>
-					</form>  --> '''
+				<p>Комментарий и лечение: {{ visit.note }}</p>
 
 			</div>
 		{% endfor %}

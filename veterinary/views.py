@@ -39,7 +39,6 @@ class Appointment(generic.View):
 		if request.user.is_authenticated:
 			client = ClientModel.objects.get(user=request.user)
 			form = AppointmentRForm(request.POST, client=client,)
-			print(form)
 			if form.is_valid():
 				staff = form.cleaned_data['staff']
 				animal = form.cleaned_data['animal']
@@ -59,8 +58,6 @@ class Appointment(generic.View):
 
 				appointment = AppointmentModel(staff=staff, district=district, date=date, email=email)
 				appointment.save()
-				visit = VisitModel(appointment=appointment, date=date)
-				visit.save()
 				return redirect('index')
 		return redirect('index')
 
@@ -70,13 +67,90 @@ class Appointment(generic.View):
 class AppointmentStaff(generic.View):
 
 	def get(self, request):
+		form = {}
+		illness = {}
+		form_status = {}
 		staff = StaffModel.objects.get(user=request.user)
 		appointments = AppointmentModel.objects.filter(staff=staff)
-		return render(request, 'veterinary/clients.html', context={'appointments': appointments})
+		for appointment in appointments:
+			if appointment.animal:
+				form[appointment.id] = IllnessForm(animal=appointment.animal.animal)
+			else:
+				form[appointment.id] = IllnessForm(animal=None)
+			try:
+				illness[appointment.id] = IllnessAppointment.objects.filter(appointment=appointment)
+			except:
+				pass
+			if illness[appointment.id]:
+				for ill in illness[appointment.id]: 
+					form_status[ill.id] = StatusForm(initial={ 'status': ill.status})
+		context = {
+			'appointments': appointments, 
+			'form': form, 
+			'illness': illness,
+			'form_status': form_status,
+		}
+		return render(request, 'veterinary/clients.html', context=context)
+
+	def post(self, request):
+		id = request.GET.get('id', '')
+		id2 = request.GET.get('id2', '')
+		if id2:
+			form = StatusForm(request.POST)
+			if form.is_valid():
+				status = form.cleaned_data['status']
+				ill = IllnessAppointment.objects.get(id=id2)
+				ill.status = status
+				ill.save()
+				return redirect('clients')
+		else:
+			appointment = AppointmentModel.objects.get(id=id)
+			if appointment.animal:
+				form = IllnessForm(request.POST, animal=appointment.animal.animal)
+			else:
+				form = IllnessForm(request.POST, animal=None)
+			if form.is_valid():
+				illness = form.cleaned_data['illness']
+				status = form.cleaned_data['status']
+				illness_model = IllnessAppointment(illness=illness, status=status, appointment=appointment)
+				illness_model.save()
+				return redirect('clients')
+		return redirect('clients')
 
 class Visits(generic.View):
 
 	def get(self, request, id):
 		appointment = AppointmentModel.objects.get(id=id)
 		visits = VisitModel.objects.filter(appointment=appointment)
-		return render(request, 'veterinary/visits.html', context={'visits': visits})
+		form = VisitForm()
+		return render(request, 'veterinary/visits.html', context={'visits': visits, 'form': form, 'appointment': appointment})
+
+	def post(self, request, id):
+		appointment = AppointmentModel.objects.get(id=id)
+		form = VisitForm(request.POST)
+		if form.is_valid():
+			note = form.cleaned_data['note']
+			visit = VisitModel(note=note, appointment=appointment)
+			visit.save()
+			return redirect('visits', id=id)
+		return redirect('visits', id=id)
+
+def DeleteClient(request, id):
+	try:
+		appointment = AppointmentModel.objects.get(id=id)
+	except:
+		appointment = None
+	if appointment:
+		try:
+			illness = IllnessAppointment.objects.filter(appointment=appointment)
+		except:
+			illness = None
+		illness.delete()
+		try:
+			visit = VisitModel.objects.filter(appointment=appointment)
+		except:
+			visit = None
+		visit.delete()
+	appointment.delete()
+	return redirect('clients')	
+

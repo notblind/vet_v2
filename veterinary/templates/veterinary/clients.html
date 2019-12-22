@@ -22,35 +22,56 @@
 		-->
 		{% for appointment in appointments %}
 			<div class="comments-item">
-				<p class="logo">Запись клиента</p>
+				<div class="row d-flex align-self-center align-items-center">	
+					<p class="logo mr-auto p-3 ">Запись клиента</p>
+					<button onclick="location.href='{% url 'visits' id=appointment.id %}'" class='m-1 forms-btn btn btn-warning' type='submit'>Посещения клиента</button>
+					<button onclick="location.href='{% url 'delete_client' id=appointment.id %}'" class='m-1 forms-btn btn btn-danger'><i class="fa fa-times" aria-hidden="true"></i></button>
+				</div>
 				{% if appointment.animal %}
 					<p>Клиент: {{ appointment.animal.client.user.first_name }} {{ appointment.animal.client.user.last_name }} {{ appointment.animal.client.user.middle_name }}</p>
-					<p>Питомец: {{ appointment.animal }} </p>
+					<p>Питомец: {{ appointment.animal }} ({{appointment.animal.animal}}) </p>
 				{% else %}
 					<p>Незарегистрированный клиент</p>
 				{% endif %}
 				<p>Почта клиента: {% if appointment.email %} {{ appointment.email }} {% else %} {{ appointment.animal.client.user.email }} {% endif %} </p>
 				<p>Дата первого посещения: {{ appointment.date }}</p>
-				<p>Диагноз:</p>
-		'''	<!--		<form method="post" action='{% url 'clients' %}?id={{ card.id }}'> 
-						{% csrf_token %}
-						{% for key, item in form.items %}
-							{% if key == card.id %}
-								<p class="tutsy">Статус:</p>
-								{{ item.status }}
-							{% endif %}
-						{% endfor %}
-						<div class="row justify-content-md-center">	
-							<button class='m-3 forms-btn btn btn-warning' type='submit'><i class="fa fa-pencil" aria-hidden="true"></i></button>
-						
-						</div>
-					</form>  --> '''
-
+				<p class="text-center">Заболевания</p>
+				<form method="post" action='{% url 'clients' %}?id={{ appointment.id }}'> 
+					{% for key, item in form.items  %}
+						{% if key == appointment.id %}
+							{% csrf_token %}
+							<div class="row">
+								{% for i in item %}
+								<div class="forms col-md-6">
+									{{ i }}
+								</div>
+								{% endfor %}
+							</div>
+						{% endif %}
+					{% endfor %}
 					<div class="row justify-content-md-center">	
-					<button onclick="location.href=''" class='m-3 forms-btn btn btn-warning' type='submit'>Поставить диагноз</button>
-					<button onclick="location.href='{% url 'visits' id=appointment.id %}'" class='m-3 forms-btn btn btn-warning' type='submit'>Посещения клиента</button>
-					<button onclick="location.href=''" class='m-3 forms-btn btn btn-danger'><i class="fa fa-times" aria-hidden="true"></i></button>
+						<button  class='m-1 forms-btn btn btn-warning ' type='submit'>Добавить диагноз</button>
 					</div>
+				</form>
+				{% for key, item in illness.items  %}
+					{% if key == appointment.id %}
+						{% for i in item %}
+						<div class="row d-flex align-self-center align-items-center">
+							<p class='col-md-4 totext'>{{ i.illness }}: </p>
+							{% for key2, item2 in form_status.items  %}
+								{% if key2 == i.id %}
+									<form class="frmx row d-flex  col-md-7" method="post" action='{% url 'clients' %}?id2={{ i.id }}'> 
+										{% csrf_token %}
+										{{ item2 }}
+										<button class='btx forms-btn btn btn-warning' type='submit'><i class="fa fa-pencil" aria-hidden="true"></i></button>
+									</form>
+								{% endif %}
+							{% endfor %}
+						</div>
+						{% endfor %}
+					{% endif %}
+				{% endfor %}
+					
 			</div>
 		{% endfor %}
 	</div>

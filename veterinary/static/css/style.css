@@ -625,8 +625,19 @@ a:active {
 .red {
   color: #3d94d5;
 }
+.totext {
+  transform: translateY(30px);
+}
 .appoint a {
   text-decoration: underline;
+}
+.btx {
+  position: absolute;
+  right: -40px;
+  top: 30px;
+}
+.frmx {
+  position: relative;
 }
 @font-face {
   font-family: "Lobster";

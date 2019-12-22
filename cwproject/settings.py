@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/2.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.2/ref/settings/
 
-1 - erd
+1 - erd: done
 
 2 - кабинет user: done
 
@@ -21,17 +21,17 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 
 6 - запись с регистрацией: done
 
-7 - клиенты стафа
+7 - клиенты стафа: today
 
 8 - карточка питомца
 
 9 - статистика
 
-10 - заполнить бд
+10 - заполнить бд - Andrew
 
 11 - врачи
 
-12 -отзывы
+12 -отзывы: today
 
 """
 

@@ -34,5 +34,30 @@ class AppointmentRForm(forms.Form):
 	animal.widget.attrs.update({'class':'form-control'})
 	date.widget.attrs.update({'class':'form-control'})
 
+class IllnessForm(forms.Form):
+	illness = forms.ModelChoiceField(label='Выберите Заболевание', queryset=None) 
+	def __init__(self, *args, **kwargs):
 
+		animal = kwargs.pop('animal', None)
+		super(IllnessForm, self).__init__(*args, **kwargs)
+		if animal:
+			self.fields['illness'].queryset = IllnessModel.objects.filter(animal=animal)
+		else:
+			self.fields['illness'].queryset = IllnessModel.objects.all()
+
+	
+	status = forms.ModelChoiceField(label='Статус', queryset=StatusModel.objects.all()) 
+
+	illness.widget.attrs.update({'class':'form-control'})
+	status.widget.attrs.update({'class':'form-control'})
+
+class StatusForm(forms.Form):
+	status = forms.ModelChoiceField(label='Статус', queryset=StatusModel.objects.all()) 
+
+	status.widget.attrs.update({'class':'form-control'})
+
+class VisitForm(forms.Form):
+	note = forms.CharField(label='Комментарий и лечение', max_length=3000, required=True, widget=forms.Textarea)
+
+	note.widget.attrs.update({'class':'form-control', 'placeholder':'Комментарий и лечение', 'rows':6})
 

@@ -4,8 +4,6 @@ from django.contrib import admin
 
 from .models import *
 
-
-admin.site.register(IllnessClass)
 admin.site.register(IllnessModel)
 admin.site.register(AppointmentModel)
 admin.site.register(StatusModel)
