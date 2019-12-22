@@ -8,68 +8,51 @@
 
 {% block content_title %}
 	<p class="m">Персонал</p>
-	<p class="s"><a href="{% url 'main_page' %}">Главная</a> / <span>Персонал</span></p>
+	<p class="s"><a href="{% url 'index' %}">Главная</a> / <span>Персонал</span></p>
 {% endblock %}
 
 {% block content %}
 	<div class="row">
-
-		<div class="col-md-3">
-			<ul class="nav flex-column nav-pills">
-				<li class="nav-item">
-					<a class="nm nav-link {% if number == 'all' %} active2 {% endif %}" href="{% url 'staff' slug='all' %}">Все специалисты</a>
-				</li>
-				{% for item in position %}
-					<li class="nav-item">
-						<a class="nm nav-link {% if number == item.slug %} active2 {% endif %}" href="{% url 'staff' slug=item.slug %}">{{ item }}</a>
-					</li>
-				{% endfor %}
-			</ul>
-		</div>
-
-		<div class="col-md-9">
 			
-			<ul class="dict nav nav-pills d-flex justify-content-center">
-			{% for item in dictionary %}
+		<ul class="dict nav nav-pills d-flex justify-content-center">
+		{% for item in dictionary %}
 
-  				<li class="nav-item">
-    				<a class="dictionary nav-link {% if letter == item %} active2 {% endif %}" href="./?letter={{ item }}">{{ item }}</a>
- 				 </li>
-
-			{% endfor %}
 				<li class="nav-item">
-			        <a class="dictionary nav-link {% if letter == '' %} active2 {% endif %}" href="./">Все буквы</a>
-			    </li>
-			</ul>
-			
-			<div class="row">
-				{% for item in doc %}
-					<div class="col-md-4 col-6 doc-box" onclick="location.href='{% url 'staff_detail' id=item.id  %}';">
-						<div class="doc-img">
-							<img class="img-fluid" src="{% if item.user.foto %} {{ item.user.foto.url }} {%endif%}">
-						</div>
-						<p class="f">{{ item.user.last_name }} {{ item.user.first_name }} {{ item.user.middle_name }}</p> 
-						<p class="s">{{ item.position }}</p>
+				<a class="dictionary nav-link {% if letter == item %} active2 {% endif %}" href="./?letter={{ item }}">{{ item }}</a>
+				 </li>
+
+		{% endfor %}
+			<li class="nav-item">
+		        <a class="dictionary nav-link {% if letter == '' %} active2 {% endif %}" href="./">Все буквы</a>
+		    </li>
+		</ul>
+		
+		<div class="row">
+			{% for item in doc %}
+				<div class="col-md-4 col-6 doc-box" onclick="location.href='{% url 'staff_detail' id=item.id  %}';">
+					<div class="doc-img">
+						<img class="img-fluid" src="{% if item.user.foto %} {{ item.user.foto.url }} {%endif%}">
 					</div>
-				{% endfor %}
-			</div>
-
-			{% if is_paginated %}
-			<ul class="offset-1 col-10 d-flex justify-content-center paginationf pagination">
-			    <li class="page-item {% if not prev_url %} disabled {% endif %}">
-			        <a class="page-link" href="./{{ prev_url }}" tabindex="-1">Предыдущая</a>
-			    </li>
-			    {% for item in doc.paginator.page_range %}
-			    <li class="page-item {% if item == doc.number %} active2 {% endif %}">
-			        <a class="page-link" href="./?page={{ item }}">{{ item }}</a>
-			    </li>
-			    {% endfor %}
-			    <li class="page-item {% if not next_url %} disabled {% endif %}">
-			        <a class="page-link" href="./{{ next_url }}">Следующая</a>
-			    </li>
-			</ul>
-			{% endif %}
-
+					<p class="f">{{ item.user.last_name }} {{ item.user.first_name }} {{ item.user.middle_name }}</p> 
+				</div>
+			{% endfor %}
 		</div>
+
+		{% if is_paginated %}
+		<ul class="offset-1 col-10 d-flex justify-content-center paginationf pagination">
+		    <li class="page-item {% if not prev_url %} disabled {% endif %}">
+		        <a class="page-link" href="./{{ prev_url }}" tabindex="-1">Предыдущая</a>
+		    </li>
+		    {% for item in doc.paginator.page_range %}
+		    <li class="page-item {% if item == doc.number %} active2 {% endif %}">
+		        <a class="page-link" href="./?page={{ item }}">{{ item }}</a>
+		    </li>
+		    {% endfor %}
+		    <li class="page-item {% if not next_url %} disabled {% endif %}">
+		        <a class="page-link" href="./{{ next_url }}">Следующая</a>
+		    </li>
+		</ul>
+		{% endif %}
+
 	</div>
 {% endblock %}

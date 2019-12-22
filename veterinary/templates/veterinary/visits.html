@@ -11,7 +11,11 @@
 {% endblock %}
 
 {% block content %} 
-	<div class = "offset-md-2 col-md-8 comments">
+
+
+<div class="ui-139">
+	<div class="container">
+			<div class = "comments">
 		<form method="POST" action="{% url 'visits' id=appointment.id %}" enctype="multipart/form-data">
 			{% csrf_token %}
 
@@ -24,20 +28,27 @@
 
 			<button class='forms-btn btn btn-secondary' type='submit'>Добавить</button>
 		</form>
-		<!--
-		<div class="row justify-content-md-center">
-			<form class="col-md-6 row justify-content-md-center" action="{% url 'clients' %}">
-				<input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="search">
-				<button class="btn btn-secondary m-3" type="submit">Search</button>
-			</form>
-		</div>
-		-->
-		{% for visit in visits %}
-			<div class="comments-item">
-				<p>Дата посещения: {{ visit.date }}</p>
-				<p>Комментарий и лечение: {{ visit.note }}</p>
-
+	</div>
+		<div class="row">
+			{% for visit in visits %}
+			<div class="col-md-6 col-sm-12 col-xs-6">
+				<!-- Item -->
+				<div class="ui-item">
+					<!-- Heading -->
+					<div class="d-flex justify-content-between">
+						<!-- Main Heading -->
+						<h2>Посещение клиента  {{ visit.date }}</h2>
+					</div>
+			
+					<div class="ui-border bg-red"></div>
+					
+					<hr/>
+					<h4 class='mb-3'>Комментарий и лечение</h4>
+					<p>{{ visit.note }}</p>
+				</div>
 			</div>
 		{% endfor %}
+		</div>
 	</div>
+</div>
 {% endblock %}

@@ -3,6 +3,8 @@ from django.shortcuts import redirect
 from django.contrib.auth.models import Group
 from django.views import generic
 
+from django.core.paginator import Paginator
+
 from accounts.models import *
 from personal.models import *
 from .models import *
@@ -14,6 +16,65 @@ class Index(generic.View):
 
 	def get(self, request):
 		return render(request, 'veterinary/index.html')
+
+#Персонал
+
+class Staff(generic.View):
+
+	def get(self, request):
+
+		dictionary = ('А','Б','В','Г','Д','Е','Ж','З','И','К','Л','М','Н','О','П','Р','С','Т','Ф','Х','Ч','Ш')
+		letter = request.GET.get('letter', '')
+		
+
+		doctor_list = StaffModel.objects.all().filter(user__last_name__startswith=letter)
+
+		paginator = Paginator(doctor_list, 9)
+		page_number = request.GET.get('page', 1)
+		page = paginator.get_page(page_number)
+
+		is_paginated = page.has_other_pages()
+
+		if page.has_previous():
+			prev_url = '?page={}'.format(page.previous_page_number())
+		else:
+			prev_url = ''
+
+		if page.has_next():
+			next_url = '?page={}'.format(page.next_page_number())
+		else:
+			next_url = ''
+
+		context = {
+			'doc': page,
+			'prev_url':prev_url,
+			'next_url':next_url,
+			'is_paginated':is_paginated,
+			'dictionary': dictionary,
+			'letter': letter,
+		}
+		return render(request, 'veterinary/staff.html', context=context)
+
+class StaffDetail(generic.View):
+
+	def get(self, request, id):
+		doctor = StaffModel.objects.get(id=id)
+		return render(request, 'veterinary/detail.html', context={'doc': doctor})
+
+#Болезни
+
+class Illnesses(generic.View):
+
+	def get(self, request):
+		illnesses = IllnessModel.objects.all()
+		animal = AnimalModel.objects.all()
+		return render(request, 'veterinary/illnesses.html', context={'illnesses': illnesses, 'animals': animal})
+
+class IllnessesDetail(generic.View):
+
+	def get(self, request, id):
+		illness = IllnessModel.objects.get(id=id)
+		return render(request, 'veterinary/detail_illness.html', context={'illness': illness})
 
 #запись
 class Appointment(generic.View):
@@ -63,6 +124,7 @@ class Appointment(generic.View):
 
 
 #Клиенты стафа
+import datetime
 
 class AppointmentStaff(generic.View):
 
@@ -101,6 +163,8 @@ class AppointmentStaff(generic.View):
 				status = form.cleaned_data['status']
 				ill = IllnessAppointment.objects.get(id=id2)
 				ill.status = status
+				if status.id == 3:
+					ill.date_end = datetime.datetime.now()
 				ill.save()
 				return redirect('clients')
 		else:
@@ -152,5 +216,49 @@ def DeleteClient(request, id):
 			visit = None
 		visit.delete()
 	appointment.delete()
-	return redirect('clients')	
+	return redirect('card')	
 
+#История питомца
+
+class History(generic.View):
+
+	def get(self, request, id):
+		illnesses = {}
+		visits = {}
+		animal = AnimaClientModel.objects.get(id=id)
+		try:
+			appointments = AppointmentModel.objects.filter(animal=animal)
+		except:
+			appointments = None
+		if appointments:
+			for appointment in appointments:
+				illnesses[appointment.id] = IllnessAppointment.objects.filter(appointment=appointment)
+		context = {
+			'animal': animal,
+			'illnesses': illnesses,
+		}
+		return render(request, 'veterinary/history.html', context=context)
+
+#Карточка питомца
+
+class Card(generic.View):
+
+	def get(self, request, id):
+		illnesses = {}
+		visits = {}
+		animal = AnimaClientModel.objects.get(id=id)
+		try:
+			appointments = AppointmentModel.objects.filter(animal=animal)
+		except:
+			appointments = None
+		if appointments:
+			for appointment in appointments:
+				illnesses[appointment.id] = IllnessAppointment.objects.filter(appointment=appointment)
+				visits[appointment.id] = VisitModel.objects.filter(appointment=appointment)
+		context = {
+			'animal': animal,
+			'appointments': appointments,
+			'illnesses': illnesses,
+			'visits': visits,
+		}
+		return render(request, 'veterinary/card.html', context=context)

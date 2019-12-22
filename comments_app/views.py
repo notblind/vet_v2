@@ -5,6 +5,7 @@ from django.views.generic import View
 
 from django.core.paginator import Paginator
 from .models import CommentsModel
+from personal.models import ClientModel
 from .forms import CommentsForm
 
 
@@ -14,7 +15,7 @@ class Comments(View):
 	
 	def get(self, request):
 		model = CommentsModel.objects.order_by('-timedate')
-		paginator = Paginator(model, 3)
+		paginator = Paginator(model, 4)
 		page_number = request.GET.get('page', 1)
 		page = paginator.get_page(page_number)
 
@@ -49,8 +50,8 @@ class Comments(View):
 		form = CommentsForm(request.POST)
 		if form.is_valid():
 			message = form.cleaned_data['message']
-
-			model = CommentsModel(user=request.user,message=message)
+			client = ClientModel.objects.get(user=request.user)
+			model = CommentsModel(client=client,message=message)
 			model.save()
 			return redirect('comments')
 		return redirect('comments')

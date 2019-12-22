@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+	{{ illness }} 
+{% endblock %}
+
+{% block content_title %}
+	<p class="m">{{ illness }}</p>
+	<p class="s"><a href="{% url 'index' %}">Главная</a> / <a href="{% url 'staff' %}">Заболевания</a> / <span>{{ illness }}</span></p>
+{% endblock %}
+
+{% block content %}
+	<div class="docdetail">
+		<p><b>Наименование:</b> {{ illness }}</p>
+		<p><b>Носитель:</b> {{ illness.animal }}</p>
+		<p><b>Описание:</b> {{ illness.description }}</p>
+	</div>
+{% endblock %}

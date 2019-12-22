@@ -10,36 +10,59 @@
 {% endblock %}
 
 {% block content %}
-	{%  if form %}
-	<div class="col-md-8 offset-md-2">
-		<form method="POST">
-			{% csrf_token %}
-			{% for item in form %}
-				<div class="forms">
-					<p class="forms-name">{{ item.label }}</p>
-					{{ item }}
-				</div>
-			{% endfor %}
-			<button class='forms-btn btn btn-secondary' type='submit'>Отправить</button>
-		</form>
-	</div>
-	{% endif %}
-	<div class = "offset-md-2 col-md-8 comments">
-		{% for item in model %}
-			<div class="comments-item row">
-				{% if item.user.foto %}
-				<img class="img-fluid col-md-4 rounded img-detail" src="{{ item.client.user.foto.url }}">
-				{% else %}
-				<img class="img-fluid col-md-4 rounded img-detail" src="/media/user.jpg">
-				{% endif %}
-				<div class='col-md-8'>
-				<p>{{ item.client.user.first_name }} {{ item.client.user.last_name }} {{ item.client.user.middle_name }}</p>
-				<p>{{ item.message }}</p>
-				<p>Дата: {{ item.timedate }}</p>
+<div class="ui-139">
+	<div class="container">
+		{%  if form %}
+		<div class = "comments">
+			<form method="POST">
+				{% csrf_token %}
+				{% for item in form %}
+					<div class="forms">
+						<p class="forms-name">{{ item.label }}</p>
+						{{ item }}
+					</div>
+				{% endfor %}
+				<button class='forms-btn btn btn-secondary' type='submit'>Отправить</button>
+			</form>
+		</div>
+		{% endif %}
+		<div class="row">
+			{% for item in model %}
+			<div class="col-md-6 col-sm-12 col-xs-6">
+				<!-- Item -->
+				<div class="ui-item">
+					<!-- Heading -->
+					<div class="d-flex justify-content-between">
+						<!-- Main Heading -->
+						<h2>{{ item.client.user.first_name }} {{ item.client.user.last_name }} {{ item.client.user.middle_name }}</h2>
+					</div>
+			
+					<div class="ui-border bg-red"></div>
+					
+					<hr/>
+					<p>{{ item.message }}</p>
+					<p>Дата: {{ item.timedate }}</p>
 				</div>
 			</div>
 		{% endfor %}
+		</div>
+		{% if is_paginated %}
+		<ul class="offset-md-3 col-md-6 d-flex justify-content-center pagination">
+		    <li class="page-item {% if not prev_url %} disabled {% endif %}">
+		        <a class="page-link" href="./{{ prev_url }}" tabindex="-1">Предыдущая</a>
+		    </li>
+		    {% for item in model.paginator.page_range %}
+		    <li class="page-item {% if item == model.number %} active {% endif %}">
+		        <a class="page-link" href="./?page={{ item }}">{{ item }}</a>
+		    </li>
+		    {% endfor %}
+		    <li class="page-item {% if not next_url %} disabled {% endif %}">
+		        <a class="page-link" href="./{{ next_url }}">Следующая</a>
+		    </li>
+		</ul>
+	{% endif %}
 	</div>
+</div>
 	{% if is_paginated %}
 	<ul class="offset-md-3 col-md-6 d-flex justify-content-center pagination">
 	    <li class="page-item {% if not prev_url %} disabled {% endif %}">

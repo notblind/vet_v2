@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+	Карточка питомца
+{% endblock %}
+
+{% block content_title %}
+	<p class="m">Карточка питомца {{ animal }}</p>
+	<p class="s"><a href="{% url 'index' %}">Главная</a> / <a href="{% url 'staff' %}">Персонал</a> / <span>{{ doc.user.last_name }} {{ doc.user.first_name }} {{ doc.user.middle_name }}</span></p>
+{% endblock %}
+
+{% block content %}
+	<div class="ui-139">
+			<div class="container">
+				<div class="row">
+					{% for appointment in appointments %}
+					<div class="col-md-12 col-sm-12 col-xs-12">
+						<!-- Item -->
+						<div class="ui-item">
+							<!-- Heading -->
+							<div class="ui-heading clearfix">
+								<!-- Main Heading -->
+								<h2>Запись</h2>
+							</div>
+					
+							<div class="ui-border bg-red"></div>
+							
+		
+							<div class="row">
+								<div class="col-md-6 col-sm-12 col-xs-6">
+									<h4>Информация о записи</h4>
+									<hr/>
+									<div class="row">
+										<div class=" col-mob">
+											<ul>
+												<li><span>Дата:</span> <b>{{ appointment.date }}</b></li>
+												<li><span>Врач:</span> <b><a href="{% url 'staff_detail' id=appointment.staff.id %}">{{ appointment.staff }}</a></b></li>
+												<li><span>Почта врача:</span> <b>{{ appointment.staff.user.email }}</b></li>
+											</ul>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-6 col-sm-12 col-xs-6">
+									<h4>Заболевания</h4>
+									<hr/>
+									<div class="row">
+										<div class=" col-mob">
+											<ul>
+												{% for key, item in illnesses.items %}
+													{% if key == appointment.id %}
+														{% for illness in item %}
+															<li><span><a href="{% url 'illnesses_detail' id=illness.illness.id %}">{{ illness.illness }}</a></span> <b>{{ illness.status }}</b></li>
+														{% endfor %}
+													{% endif %}
+												{% endfor %}
+											</ul>
+										</div>
+									</div>
+								</div>
+							</div>
+							{% for key, item in visits.items %}
+								{% if key == appointment.id %}
+								<!-- Border -->
+								{% if item %}
+								
+								<hr/>
+								<h4>Посещения и комментарии лечащего врача</h4>
+								{% endif %}
+									{% for visit in item %}
+										<p>{{ visit.date }}</p>	
+										<p>{{ visit.note }}</p>
+										<hr/>									
+									{% endfor %}
+								{% endif %}
+							{% endfor %}
+							<button onclick="location.href='{% url 'delete_client' id=appointment.id %}'" class='m-1 forms-btn btn btn-danger'>Отменить запись</button> 
+						</div>
+					</div>
+				{% endfor %}
+				</div>
+			</div>
+		</div>
+{% endblock %}

@@ -24,9 +24,10 @@
 		</div>
 		<div class="col-md-9">
 			<div class="row">
-				<button onclick="location.href=''" class='m-3 forms-btn btn btn-primary' type='submit'>Карточка питомца</button>
+				<button onclick="location.href='{% url 'card' id=animal.id %}'" class='m-3 forms-btn btn btn-primary' type='submit'>Карточка питомца</button>
+				<button onclick="location.href='{% url 'history' id=animal.id %}'" class='m-3 forms-btn btn btn-primary' type='submit'>История заболеваний</button>
 				<button onclick="location.href='{% url 'change_animal' id=animal.id %}'" class='m-3 forms-btn btn btn-warning' type='submit'>Редактировать</button>
-				<button type="button" class="m-3 forms-btn btn btn-danger" data-toggle="modal" data-target="#exampleModal">Удалить</button>
+				<button type="button" class="m-3 forms-btn btn btn-danger" data-toggle="modal" data-target="#exampleModal">Выписаться</button>
 			</div>
 			<table class="table table-hover">
 			  <thead>

@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+	История заболеваний
+{% endblock %}
+
+{% block content_title %}
+	<p class="m">История заболеваний {{ animal }}</p>
+	<p class="s"><a href="{% url 'index' %}">Главная</a> / <a href="{% url 'personal' %}">Личный кабинет</a> / <span>История заболеваний</span></p>
+{% endblock %}
+
+{% block content %}
+	<div class = "comments">
+		<table class="table table-hover">
+		  <thead>
+		    <tr>
+		      <th scope="col">Название</th>
+		      <th scope="col">Лечащий врач</th>
+		      <th scope="col">Дата диагностики</th>
+		      <th scope="col">Дата ремиссии</th>
+		      <th scope="col">Статус</th>
+		    </tr>
+		  </thead>
+		  <tbody>
+		  	{% for key, item in illnesses.items %}
+		  		{% for illness in item %}
+				    <tr class="linkhis">
+				      <td><a href='{% url 'illnesses_detail' id=illness.illness.id %}'>{{ illness.illness }}</a></td>
+				      <td><a href='{% url 'staff_detail' id=illness.appointment.staff.id %}'>{{ illness.appointment.staff }}</a></td>
+				      <td>{{ illness.date_start }}</td>
+				      <td>{% if illness.date_end %} {{ illness.date_end }} {% else %} - {% endif %}</td>
+				      {% if illness.status.id == 3 %} <td class="red">{{ illness.status }}</td> {% else %} <td>{{ illness.status }}</td> {% endif %}
+				    </tr>
+				{% endfor %}
+		    {% endfor %}
+		  </tbody>
+		</table>
+
+	</div>
+{% endblock %}

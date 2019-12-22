@@ -28,7 +28,7 @@
     <div class='logo row'>
       <p class='l-logo col-md-6 col-12'><a href="{% url 'index' %}">Ветеринарная клиника</a></p>
       <div class='row col-md-6 col-12 d-flex justify-content-md-end justify-content-start'>
-        <p class="address">г. Красноярск, ул. Мира 4 <br><span>+7 (800) 555-35-30</span></p>
+        <p class="address">г. Санкт-Петербург, ул. Мира 4 <br><span>+7 (800) 555-35-30</span></p>
       </div>
     </div>
   </header>
@@ -46,9 +46,9 @@
         <div id="menu" class="nav_menu">
           <ul>
             <li class="box-item"><a href="{% url 'index' %}">Главная</a></li>
-            <li class="box-item"><a href="">Услуги и цены</a></li>
-            <li class="box-item"><a href="">Персонал</a></li>
-            <li class="box-item"><a href="">Отзывы</a></li>
+            <li class="box-item"><a href="{% url 'illnesses' %}">Заболевания</a></li>
+            <li class="box-item"><a href="{% url 'staff' %}">Персонал</a></li>
+            <li class="box-item"><a href="{% url 'comments' %}"">Отзывы</a></li>
             {% if user.is_staff %}
             <li class="box-item"><a href="">Статистика</a></li>
             {% else %}

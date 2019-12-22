@@ -7,7 +7,7 @@
 
 {% block content_title %}
 	<p class="m">{{ doc.user.last_name }} {{ doc.user.first_name }} {{ doc.user.middle_name }}</p>
-	<p class="s"><a href="{% url 'main_page' %}">Главная</a> / <a href="{% url 'staff' slug='all' %}">Персонал</a> / <span>{{ doc.user.last_name }} {{ doc.user.first_name }} {{ doc.user.middle_name }}</span></p>
+	<p class="s"><a href="{% url 'index' %}">Главная</a> / <a href="{% url 'staff' %}">Персонал</a> / <span>{{ doc.user.last_name }} {{ doc.user.first_name }} {{ doc.user.middle_name }}</span></p>
 {% endblock %}
 
 {% block content %}
@@ -17,7 +17,7 @@
 		</div>
 		<div class="col-md-8">
 			<h3>{{ doc.user.last_name }} {{ doc.user.first_name }} {{ doc.user.middle_name }}</h3>
-			<p><b>Специализация:</b> {{ doc.position }}</p>
+			<p><b>Квалификация:</b> {{ doc.qualification }}</p>
 			<p><b>Образование:</b> {{ doc.education }}</p>
 			<p><b>Квалификация:</b> {{ doc.qualification }}</p>
 			<p>{{ doc.description }}</p>

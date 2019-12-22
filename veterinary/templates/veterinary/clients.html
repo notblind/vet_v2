@@ -11,68 +11,95 @@
 {% endblock %}
 
 {% block content %} 
-	<div class = "offset-md-2 col-md-8 comments">
-		<!--
-		<div class="row justify-content-md-center">
-			<form class="col-md-6 row justify-content-md-center" action="{% url 'clients' %}">
-				<input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="search">
-				<button class="btn btn-secondary m-3" type="submit">Search</button>
-			</form>
-		</div>
-		-->
-		{% for appointment in appointments %}
-			<div class="comments-item">
-				<div class="row d-flex align-self-center align-items-center">	
-					<p class="logo mr-auto p-3 ">Запись клиента</p>
-					<button onclick="location.href='{% url 'visits' id=appointment.id %}'" class='m-1 forms-btn btn btn-warning' type='submit'>Посещения клиента</button>
-					<button onclick="location.href='{% url 'delete_client' id=appointment.id %}'" class='m-1 forms-btn btn btn-danger'><i class="fa fa-times" aria-hidden="true"></i></button>
-				</div>
-				{% if appointment.animal %}
-					<p>Клиент: {{ appointment.animal.client.user.first_name }} {{ appointment.animal.client.user.last_name }} {{ appointment.animal.client.user.middle_name }}</p>
-					<p>Питомец: {{ appointment.animal }} ({{appointment.animal.animal}}) </p>
-				{% else %}
-					<p>Незарегистрированный клиент</p>
-				{% endif %}
-				<p>Почта клиента: {% if appointment.email %} {{ appointment.email }} {% else %} {{ appointment.animal.client.user.email }} {% endif %} </p>
-				<p>Дата первого посещения: {{ appointment.date }}</p>
-				<p class="text-center">Заболевания</p>
-				<form method="post" action='{% url 'clients' %}?id={{ appointment.id }}'> 
-					{% for key, item in form.items  %}
-						{% if key == appointment.id %}
-							{% csrf_token %}
-							<div class="row">
-								{% for i in item %}
-								<div class="forms col-md-6">
-									{{ i }}
+	<div class="ui-139">
+		<div class="container">
+			<div class="row">
+				{% for appointment in appointments %}
+				<div class="col-md-12 col-sm-12 col-xs-12">
+					<!-- Item -->
+					<div class="ui-item">
+						<!-- Heading -->
+						<div class="d-flex justify-content-between">
+							<!-- Main Heading -->
+							<h2>Запись клиента</h2>
+							<button onclick="location.href='{% url 'visits' id=appointment.id %}'" class='m-1 forms-btn btn btn-warning' type='submit'>Посещения клиента</button>
+						</div>
+				
+						<div class="ui-border bg-red"></div>
+						
+	
+						<div class="row">
+							<div class="col-md-6 col-sm-12 col-xs-6">
+								<h4>Информация о записи</h4>
+								<hr/>
+								<div class="row">
+									<div class=" col-mob">
+										<ul>
+										{% if appointment.animal %}
+											<li><span>Клиент:</span> <b>{{ appointment.animal.client.user.first_name }} {{ appointment.animal.client.user.last_name }} {{ appointment.animal.client.user.middle_name }}</b></li>
+											<li><span>Питомец:</span> <b>{{ appointment.animal }} ({{appointment.animal.animal}})</b></li>
+										{% else %}
+											<li><span>Незарегистрированный клиент</span></li>
+										{% endif %}
+											<li><span>Почта клиента:</span> <b>{% if appointment.email %} {{ appointment.email }} {% else %} {{ appointment.animal.client.user.email }} {% endif %}</b></li>
+											<li><span>Дата первого посещения:</span> <b>{{ appointment.date }}</b></li>
+										</ul>
+									</div>
 								</div>
-								{% endfor %}
 							</div>
-						{% endif %}
-					{% endfor %}
-					<div class="row justify-content-md-center">	
-						<button  class='m-1 forms-btn btn btn-warning ' type='submit'>Добавить диагноз</button>
-					</div>
-				</form>
-				{% for key, item in illness.items  %}
-					{% if key == appointment.id %}
-						{% for i in item %}
-						<div class="row d-flex align-self-center align-items-center">
-							<p class='col-md-4 totext'>{{ i.illness }}: </p>
-							{% for key2, item2 in form_status.items  %}
-								{% if key2 == i.id %}
-									<form class="frmx row d-flex  col-md-7" method="post" action='{% url 'clients' %}?id2={{ i.id }}'> 
-										{% csrf_token %}
-										{{ item2 }}
-										<button class='btx forms-btn btn btn-warning' type='submit'><i class="fa fa-pencil" aria-hidden="true"></i></button>
-									</form>
+							<div class="col-md-6 col-sm-12 col-xs-6">
+								<h4>Заболевания</h4>
+								<hr/>
+								<div class="row">
+									<div class=" col-mob">
+										<ul>
+											{% for key, item in illness.items  %}
+												{% if key == appointment.id %}
+													{% for i in item %}
+													
+														<li><span>{{ i.illness }}</span>
+														{% for key2, item2 in form_status.items  %}
+															{% if key2 == i.id %}
+																<form class="frmx row d-flex" method="post" action='{% url 'clients' %}?id2={{ i.id }}'> 
+																	{% csrf_token %}
+																	{{ item2.status }}
+																	<button class='btx forms-btn btn btn-warning' type='submit'><i class="fa fa-pencil" aria-hidden="true"></i></button>
+																</form>
+															{% endif %}
+														{% endfor %}
+														</li>
+													
+													{% endfor %}
+												{% endif %}
+											{% endfor %}
+										</ul>
+									</div>
+								</div>
+							</div>
+						</div>
+						<hr/>
+						<h4 class='mb-3'>Добавить диагноз</h4>
+						<form method="post" action='{% url 'clients' %}?id={{ appointment.id }}'> 
+							{% for key, item in form.items  %}
+								{% if key == appointment.id %}
+									{% csrf_token %}
+									<div class="row">
+										{% for i in item %}
+										<div class="forms col-md-6">
+											{{ i }}
+										</div>
+										{% endfor %}
+									</div>
 								{% endif %}
 							{% endfor %}
-						</div>
-						{% endfor %}
-					{% endif %}
-				{% endfor %}
-					
+							<div class="d-flex justify-content-end">	
+								<button  class='m-1 btn btn-warning ' type='submit'>Добавить диагноз</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			{% endfor %}
 			</div>
-		{% endfor %}
+		</div>
 	</div>
 {% endblock %}
