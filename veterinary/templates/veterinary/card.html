@@ -7,7 +7,7 @@
 
 {% block content_title %}
 	<p class="m">Карточка питомца {{ animal }}</p>
-	<p class="s"><a href="{% url 'index' %}">Главная</a> / <a href="{% url 'staff' %}">Персонал</a> / <span>{{ doc.user.last_name }} {{ doc.user.first_name }} {{ doc.user.middle_name }}</span></p>
+	<p class="s"><a href="{% url 'index' %}">Главная</a> / <a href="{% url 'personal' %}">Личный кабинет</a> / <a href="{% url 'get_animal' id=animal.id %}">Страничка питомца</a> / <span>Карточка питомца {{ animal }}</span></p>
 {% endblock %}
 
 {% block content %}

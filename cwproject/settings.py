@@ -23,7 +23,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 
 7 - клиенты стафа: done
 
-8 - карточка питомца: pick
+8 - карточка питомца: done
 
 9 - статистика
 
@@ -31,7 +31,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 
 11 - врачи
 
-12 - отзывы: today
+12 - отзывы: done
 
 """
 

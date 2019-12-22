@@ -7,14 +7,10 @@
 	Редактировать
 {% endblock %}
 
-{% block link %}
-
-
-{% endblock %}
 
 {% block content_title %}
 	<p class="m">Редактировать</p>
-	<p class="s"><a href="{% url 'index' %}">Главная</a> / <a href="{% url 'personal' %}">Личный кабинет</a> / <span>Добавить питомца</span></p>
+	<p class="s"><a href="{% url 'index' %}">Главная</a> / <a href="{% url 'personal' %}">Личный кабинет</a> / <a href="{% url 'get_animal' id=idan %}">Страничка питомца</a> / <span>Редактировать</span></p>
 {% endblock %}
 
 {% block content %}
