@@ -41,7 +41,7 @@
 					
 					<hr/>
 					<p>{{ item.message }}</p>
-					<p>Дата: {{ item.timedate }}</p>
+					<p>Дата: {{ item.timedate|date:"d-m-Y" }}</p>
 				</div>
 			</div>
 		{% endfor %}

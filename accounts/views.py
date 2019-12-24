@@ -18,8 +18,8 @@ class SignUp(generic.CreateView):
 		instance = form.save(commit=False)
 		instance.save() 
 		ds = DistrictModel.objects.get(id=1)
-		cl = ClientModel(user=instance, district=ds, points=0)
-		cl.save()
+		cl = ClientModel(user=instance, district=ds)
+		cl.save() 
 		return redirect('login')
 
 from django.contrib.auth import logout

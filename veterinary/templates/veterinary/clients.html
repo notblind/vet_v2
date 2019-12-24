@@ -14,6 +14,25 @@
 	<div class="ui-139">
 		<div class="container">
 			<div class="row">
+		
+				<div class="btn-group d-flex flex-column align-items-center" role="group" aria-label="Button group with nested dropdown">
+					<div>
+					<p class="ui-self">Общее кол-во клиентов: {{ numbers }}</p>
+				</div>
+				  <div class="btn-group" role="group">
+				    <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+				      Сортировать по
+				    </button>
+				    <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+				      <a class="dropdown-item" href="./?sort=1">Дате</a>
+				      <a class="dropdown-item" href="./?sort=2">Имени</a>
+				      <a class="dropdown-item" href="./?sort=3">Фамилии</a>
+				      <a class="dropdown-item" href="./?sort=4">Отчеству</a>
+				      <a class="dropdown-item" href="./?sort=5">Питомцу</a>
+					  <a class="dropdown-item" href="./?sort=6">Записи</a>	
+				    </div>
+				  </div>
+				</div>
 				{% for appointment in appointments %}
 				<div class="col-md-12 col-sm-12 col-xs-12">
 					<!-- Item -->

@@ -3,6 +3,9 @@ from django.views import generic
 from django.urls import reverse_lazy
 from django.shortcuts import redirect
 
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+
 from .models import *
 from .forms import *
 # Create your views here.
@@ -10,6 +13,7 @@ from .forms import *
 
 class Personal(generic.View):
 
+	@method_decorator(login_required())
 	def get(self, request):
 		animals = None
 		if request.user.is_staff:
@@ -39,10 +43,12 @@ def load_breeds(request):
 
 class AddAnimal(generic.View):
 
+	@method_decorator(login_required())
 	def get(self, request):
 		form = AddAnimalForm()
 		return render(request, 'personal/addanimal.html', context={'form': form})
 
+	@method_decorator(login_required())
 	def post(self, request):
 		form = AddAnimalForm(request.POST, request.FILES)
 		if form.is_valid():
@@ -64,6 +70,7 @@ class AddAnimal(generic.View):
 from django.contrib.auth.mixins import LoginRequiredMixin
 class ChangeClient(LoginRequiredMixin, generic.View):
 
+	@method_decorator(login_required())
 	def get(self, request):
 		client = ClientModel.objects.get(user=request.user)
 		initial = {
@@ -77,6 +84,7 @@ class ChangeClient(LoginRequiredMixin, generic.View):
 		form = ChangeClientForm(initial=initial)
 		return render(request, 'personal/change.html', context={'form': form})
 
+	@method_decorator(login_required())
 	def post(self, request):
 		form = ChangeClientForm(request.POST, request.FILES)
 		if form.is_valid():
@@ -106,14 +114,17 @@ class ChangeClient(LoginRequiredMixin, generic.View):
 
 #Pets personal
 
+
 class GetAnimal(generic.View):
 
+	@method_decorator(login_required())
 	def get(self, request, id):
 		animal = AnimaClientModel.objects.get(id=id)
 		return render(request, 'personal/animal.html', context={'animal': animal})
 
 class ChangeAnimal(generic.View):
 
+	@method_decorator(login_required())
 	def get(self, request, id):
 		animal = AnimaClientModel.objects.get(id=id)
 		initial = {
@@ -126,6 +137,7 @@ class ChangeAnimal(generic.View):
 		form = AddAnimalForm(initial=initial)
 		return render(request, 'personal/changeanimal.html', context={'form': form, 'idan': id})
 
+	@method_decorator(login_required())
 	def post(self, request, id):
 		form = AddAnimalForm(request.POST, request.FILES)
 		if form.is_valid():
@@ -149,6 +161,7 @@ class ChangeAnimal(generic.View):
 
 class DeleteAnimal(generic.View):
 
+	@method_decorator(login_required())
 	def get(self, request, id=None):
 		try:
 			animal = AnimaClientModel.objects.get(id=id)
@@ -163,6 +176,7 @@ class DeleteAnimal(generic.View):
 from django.contrib.auth.mixins import LoginRequiredMixin
 class ChangeStaff(LoginRequiredMixin, generic.View):
 
+	@method_decorator(login_required())
 	def get(self, request):
 		staff = StaffModel.objects.get(user=request.user)
 		initial = {
@@ -178,6 +192,7 @@ class ChangeStaff(LoginRequiredMixin, generic.View):
 		form = ChangeStaffForm(initial=initial)
 		return render(request, 'personal/change_staff.html', context={'form': form})
 
+	@method_decorator(login_required())
 	def post(self, request):
 		form = ChangeStaffForm(request.POST, request.FILES)
 		if form.is_valid():

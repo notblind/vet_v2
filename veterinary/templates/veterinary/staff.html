@@ -29,7 +29,7 @@
 		
 		<div class="row">
 			{% for item in doc %}
-				<div class="col-md-4 col-6 doc-box" onclick="location.href='{% url 'staff_detail' id=item.id  %}';">
+				<div class="col-md-3 col-6 doc-box" onclick="location.href='{% url 'staff_detail' id=item.id  %}';">
 					<div class="doc-img">
 						<img class="img-fluid" src="{% if item.user.foto %} {{ item.user.foto.url }} {%endif%}">
 					</div>

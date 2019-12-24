@@ -466,14 +466,14 @@ footer p {
   margin-bottom: 20px;
 }
 .doc-box .doc-img {
-  height: 450px;
+  height: 350px;
   width: 100%;
   z-index: 9;
   background-color: #222222;
   border-radius: 5px;
 }
 .doc-box .doc-img img {
-  height: 450px;
+  height: 350px;
   width: 100%;
   border-radius: 5px;
 }
@@ -561,6 +561,9 @@ a:active {
 .comments-item .logo {
   text-align: center;
   font-weight: 600;
+}
+.fulcc {
+  min-height: 200px;
 }
 .tutsy {
   z-index: 10;
@@ -671,6 +674,9 @@ a:active {
 }
 .col-mob ul li a:hover {
   color: #3d94d5;
+}
+.ui-self {
+  font-size: 20px;
 }
 @media (max-width: 325px) {
   .ui-139 .ui-item h2 {

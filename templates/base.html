@@ -50,7 +50,7 @@
             <li class="box-item"><a href="{% url 'staff' %}">Персонал</a></li>
             <li class="box-item"><a href="{% url 'comments' %}"">Отзывы</a></li>
             {% if user.is_staff %}
-            <li class="box-item"><a href="">Статистика</a></li>
+            <li class="box-item"><a href="{% url 'statistics' %}">Статистика</a></li>
             {% else %}
             <li class="box-item"><a href="{% url 'appointment' %}">Записаться на прием</a></li>
             {% endif %}

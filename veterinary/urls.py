@@ -13,4 +13,5 @@ urlpatterns = [
     path('personal/clients/<int:id>/visits/', Visits.as_view(), name='visits'),
     path('personal/pet/<int:id>/history/', History.as_view(), name='history'),
     path('personal/pet/<int:id>/card/', Card.as_view(), name='card'),
+    path('personal/staff/statistics/', Statistics.as_view(), name='statistics'),
 ]

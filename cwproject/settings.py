@@ -29,10 +29,15 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 
 10 - заполнить бд - Andrew
 
-11 - врачи
+11 - врачи f
 
 12 - отзывы: done
 
+13 - поиск f
+
+14 - безопасность 
+
+15 - все юзера
 """
 
 import os
@@ -163,4 +168,5 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 LOGIN_REDIRECT_URL = 'personal'
 LOGOUT_REDIRECT_URL = 'index'
+
 

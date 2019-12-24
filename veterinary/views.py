@@ -5,11 +5,15 @@ from django.views import generic
 
 from django.core.paginator import Paginator
 
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+
 from accounts.models import *
 from personal.models import *
 from .models import *
 from .forms import *
 
+from django.db import connection
 # Create your views here.
 
 class Index(generic.View):
@@ -29,7 +33,7 @@ class Staff(generic.View):
 
 		doctor_list = StaffModel.objects.all().filter(user__last_name__startswith=letter)
 
-		paginator = Paginator(doctor_list, 9)
+		paginator = Paginator(doctor_list, 12)
 		page_number = request.GET.get('page', 1)
 		page = paginator.get_page(page_number)
 
@@ -125,16 +129,32 @@ class Appointment(generic.View):
 
 #Клиенты стафа
 import datetime
-
 class AppointmentStaff(generic.View):
 
+	@method_decorator(login_required())
 	def get(self, request):
 		form = {}
 		illness = {}
 		form_status = {}
+		numbers = 0
 		staff = StaffModel.objects.get(user=request.user)
-		appointments = AppointmentModel.objects.filter(staff=staff)
+		sort = request.GET.get('sort', '1')
+		print(sort)
+		if sort=='1':
+			appointments = AppointmentModel.objects.filter(staff=staff).order_by('-date')
+		elif sort=='2':
+			appointments = AppointmentModel.objects.filter(staff=staff).order_by('animal__client__user__first_name')
+		elif sort=='3':
+			appointments = AppointmentModel.objects.filter(staff=staff).order_by('animal__client__user__last_name')
+		elif sort=='4':
+			appointments = AppointmentModel.objects.filter(staff=staff).order_by('animal__client__user__middle_name')
+		elif sort=='5':
+			appointments = AppointmentModel.objects.filter(staff=staff).order_by('animal__nickname')
+		elif sort=='6':
+			appointments = AppointmentModel.objects.filter(staff=staff).order_by('-id')
+
 		for appointment in appointments:
+			numbers = numbers + 1
 			if appointment.animal:
 				form[appointment.id] = IllnessForm(animal=appointment.animal.animal)
 			else:
@@ -151,9 +171,11 @@ class AppointmentStaff(generic.View):
 			'form': form, 
 			'illness': illness,
 			'form_status': form_status,
+			'numbers': numbers,
 		}
 		return render(request, 'veterinary/clients.html', context=context)
 
+	@method_decorator(login_required())	
 	def post(self, request):
 		id = request.GET.get('id', '')
 		id2 = request.GET.get('id2', '')
@@ -183,12 +205,14 @@ class AppointmentStaff(generic.View):
 
 class Visits(generic.View):
 
+	@method_decorator(login_required())
 	def get(self, request, id):
 		appointment = AppointmentModel.objects.get(id=id)
 		visits = VisitModel.objects.filter(appointment=appointment)
 		form = VisitForm()
 		return render(request, 'veterinary/visits.html', context={'visits': visits, 'form': form, 'appointment': appointment})
 
+	@method_decorator(login_required())	
 	def post(self, request, id):
 		appointment = AppointmentModel.objects.get(id=id)
 		form = VisitForm(request.POST)
@@ -199,6 +223,7 @@ class Visits(generic.View):
 			return redirect('visits', id=id)
 		return redirect('visits', id=id)
 
+@login_required()
 def DeleteClient(request, id):
 	try:
 		appointment = AppointmentModel.objects.get(id=id)
@@ -220,8 +245,10 @@ def DeleteClient(request, id):
 
 #История питомца
 
+
 class History(generic.View):
 
+	@method_decorator(login_required())
 	def get(self, request, id):
 		illnesses = {}
 		visits = {}
@@ -243,6 +270,7 @@ class History(generic.View):
 
 class Card(generic.View):
 
+	@method_decorator(login_required())
 	def get(self, request, id):
 		illnesses = {}
 		visits = {}
@@ -262,3 +290,50 @@ class Card(generic.View):
 			'visits': visits,
 		}
 		return render(request, 'veterinary/card.html', context=context)
+
+#Статистика
+
+class Statistics(generic.View):
+
+	def get(self, request):
+		c = connection.cursor()
+		avg_animal = []
+		avg_illness = []
+		avg_an2 = []
+		avg_illness2 = []
+		try:
+			c.callproc('avgHeal')
+			avgh = c.fetchall()
+
+			c.callproc('avgHealGroupByAnimal')
+			for i in c:
+				avg_animal.append(i)
+
+			c.callproc('avgHealGroupByIllness')
+			for i in c:
+				avg_illness.append(i)
+
+			c.callproc('avgHealAllAnimals')
+			avgHealAllAnimals = c.fetchall()
+			
+			c.callproc('avgHealGroupByAnimal2')
+			for i in c:
+				avg_an2.append(i)
+
+			c.callproc('avgHealGroupByIllness2')
+			for i in c:
+				avg_illness2.append(i)
+
+		finally:
+			c.close()
+
+		context = {
+			'avg_animal': avg_animal,
+			'avgh': avgh,
+			'avg_illness': avg_illness,
+			'avgHealAllAnimals': avgHealAllAnimals,
+			'avg_an2': avg_an2,
+			'avg_illness2': avg_illness,
+		}
+		return render(request, 'veterinary/statistics.html', context=context)
+
