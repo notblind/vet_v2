@@ -122,7 +122,7 @@ execute procedure delcountanimal();</p>
         language sql;</p>
 
 
-    <p>--Процент вылеченных группированые по животным--</p>
+    <p>--Процент вылеченных группированные по животным--</p>
 	<p>create function avgHealGroupByAnimal2() returns table(name varchar, avgHeal float) as 
         $$   with t as (select count(*)::float 
         from veterinary_illnessappointment 
@@ -138,7 +138,7 @@ execute procedure delcountanimal();</p>
         language sql;</p>
 
 
-    <p>--процент вылеченных группированые по болезням--</p>
+    <p>--процент вылеченных группированные по болезням--</p>
 	<p>create function avgHealGroupByIllness2() returns table(name varchar, avgHeal float) as 
         $$   with t as (select count(*)::float
         from veterinary_illnessappointment 
